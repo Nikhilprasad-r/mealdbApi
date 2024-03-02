@@ -1,6 +1,24 @@
 document.getElementById("error-message").style.display = "none";
 document.getElementById("loader-display").style.display = "none";
+const searchResult = document.getElementById("search-result");
 
+// Creating animation for search page
+searchResult.innerHTML = `<div id="cooking">
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div class="bubble"></div>
+<div id="area">
+    <div id="sides">
+        <div id="pan"></div>
+        <div id="handle"></div>
+    </div>
+    <div id="pancake">
+        <div id="pastry"></div>
+    </div>
+</div>
+</div>`;
 // using api to find meals according to given search text
 const searchFood = (searchText) => {
   document.getElementById("error-message").style.display = "none";
@@ -43,11 +61,12 @@ form.addEventListener("submit", function (event) {
 
 // displaying found items according to search
 const displaySearchResult = (meals) => {
-  const searchResult = document.getElementById("search-result");
   searchResult.textContent = "";
-
+  // creating a alert using div
   if (meals == null || meals.length == 0) {
-    alert("No result found!, try western dishes");
+    searchResult.innerHTML = `<div class="alert mb-3 w-50 mx-auto alert-warning" role="alert">
+    Seems Like we don't have recipie for this, Try again using some other dish
+  </div>`;
     return;
   }
 
@@ -56,8 +75,12 @@ const displaySearchResult = (meals) => {
     const div = document.createElement("div");
     div.classList.add("col");
     div.innerHTML = `
-            <div onclick="loadMealDetail(${meal.idMeal})" class="card h-100">
-                <img src="${meal.strMealThumb}" class="card-img-top" alt="Meal">
+            <div onclick="loadMealDetail(${
+              meal.idMeal
+            })" class="card h-100 rounded">
+                <img src="${
+                  meal.strMealThumb
+                }" class="card-img-top rounded" alt="Meal">
                 <div class="card-body">
                     <h5 class="card-title">${meal.strMeal}</h5>
                     <p class="card-text">${meal.strInstructions.slice(
@@ -101,7 +124,7 @@ const displayMealDetail = (meal) => {
                 <a href="${
                   meal.strYoutube
                 }" class="btn btn-primary">Watch the video</a>
-                <ul id="ingredient-list">
+                <ul id="ingredient-list" class='list-group list-group-flush'>
                 <!-- Ingredient list will be displayed here -->
             </ul>
             </div>
@@ -117,6 +140,7 @@ const displayMealDetail = (meal) => {
     const measure = meal[`strMeasure${i}`];
     if (ingredient && ingredient.trim() !== "") {
       const listItem = document.createElement("li");
+      listItem.className = "list-group-item";
       listItem.textContent = `${ingredient} - ${measure}`;
       ingredientList.appendChild(listItem);
     }
